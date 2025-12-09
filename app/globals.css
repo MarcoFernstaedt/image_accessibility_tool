@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Body baseline */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Strong focus outlines for keyboard users */
+:focus-visible {
+  outline: 2px solid #38bdf8; /* sky-400 */
+  outline-offset: 3px;
+}
+
+/* reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
