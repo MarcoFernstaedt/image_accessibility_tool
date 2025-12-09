@@ -36,7 +36,7 @@ const aj = arcjet({
     tokenBucket({
       mode: "LIVE",
       refillRate: 5, // 5 requests
-      interval: 60,  // per 60 seconds
+      interval: 60, // per 60 seconds
       capacity: 5,
     }),
   ],
@@ -45,7 +45,9 @@ const aj = arcjet({
 // --------------------
 // Image Extraction
 // --------------------
-const extractImageDataUrl = async (req: NextRequest): Promise<string | null> => {
+const extractImageDataUrl = async (
+  req: NextRequest
+): Promise<string | null> => {
   const contentType = req.headers.get("content-type") || "";
 
   if (contentType.startsWith("multipart/form-data")) {
@@ -138,23 +140,16 @@ export const POST = async (req: NextRequest) => {
       ],
     });
 
-    const rawContent = visionRes.choices[0]?.message?.content;
+    const rawContent = visionRes.choices[0]?.message?.content ?? "";
 
     const description =
-      (typeof rawContent === "string"
-        ? rawContent
-        : Array.isArray(rawContent)
-        ? rawContent.map((p: any) => p?.text ?? "").join(" ")
-        : "")
-        .trim()
-        .slice(0, 800) || "No description available.";
+      rawContent.toString().trim().slice(0, 800) || "No description available.";
 
     // 2️⃣ Text-to-Speech
     const ttsRes = await openai.audio.speech.create({
       model: "gpt-4o-mini-tts",
       voice: "onyx",
       input: description,
-      format: "mp3",
     });
 
     const audioArrayBuffer = await ttsRes.arrayBuffer();
