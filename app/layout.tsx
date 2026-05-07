@@ -13,6 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL ??
+      (process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000")
+  ),
   title: "AI Image to Audio Accessibility Tool",
   description:
     "Convert images into clear spoken audio descriptions using AI. Built for blind and low-vision users with real-time text-to-speech and full screen reader support.",
@@ -24,15 +30,20 @@ export const metadata: Metadata = {
     "vision to speech",
     "Next.js AI app",
     "OpenAI vision",
-    "web accessibility"
+    "web accessibility",
   ],
   authors: [{ name: "Marco Fernstaedt" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "AI Image to Audio Accessibility Tool",
     description:
       "Upload an image and instantly receive an AI-generated spoken description designed for blind and low-vision users.",
     type: "website",
     locale: "en_US",
+    url: "/",
+    siteName: "AI Image to Audio Accessibility Tool",
   },
   twitter: {
     card: "summary_large_image",

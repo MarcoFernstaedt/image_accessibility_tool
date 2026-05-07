@@ -211,7 +211,15 @@ const HomePage = () => {
           </section>
         )}
 
-        <button onClick={resetState}>Reset</button>
+        {status !== "idle" && (
+          <button
+            type="button"
+            onClick={resetState}
+            className="mt-6 w-full rounded-lg border border-slate-700 bg-transparent px-4 py-2 text-sm font-medium text-slate-400 transition hover:border-slate-500 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+          >
+            Start over
+          </button>
+        )}
       </div>
     </main>
   );
