@@ -110,7 +110,7 @@ const HomePage = () => {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-8">
+    <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-8 text-slate-100">
       <div className="w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg shadow-slate-950/60">
         <header className="mb-6">
           <h1 className="text-2xl font-semibold tracking-tight">
