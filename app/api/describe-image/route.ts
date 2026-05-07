@@ -6,9 +6,15 @@ import { isSpoofedBot } from "@arcjet/inspect";
 // --------------------
 // OpenAI Client
 // --------------------
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const getOpenAIClient = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is not configured");
+  }
+
+  return new OpenAI({ apiKey });
+};
 
 // --------------------
 // Force Node Runtime (required for Buffer + audio)
@@ -107,6 +113,7 @@ export const POST = async (req: NextRequest) => {
 
   // ✅ Main AI Pipeline
   try {
+    const openai = getOpenAIClient();
     const imageDataUrl = await extractImageDataUrl(req);
 
     if (!imageDataUrl) {
