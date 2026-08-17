@@ -1,96 +1,93 @@
 # AI Image-to-Audio Accessibility Platform
 
-A blind-first AI system that converts images into real-time spoken descriptions using computer vision and text-to-speech.
+[Live demo](https://ita-orpin.vercel.app) | [CI](https://github.com/MarcoFernstaedt/image_accessibility_tool/actions)
 
-This platform allows blind and low-vision users to immediately understand visual content through audio.
+A blind-first Next.js application that converts an uploaded image into a concise visual description and spoken MP3 output. The interface is designed for keyboard and screen-reader use rather than treating accessibility as a later enhancement.
 
----
+## What it demonstrates
 
-## Features
+- End-to-end image-to-description-to-speech pipeline
+- Binary image and audio transport through a Next.js API route
+- Keyboard-operable upload, playback, and download workflow
+- Screen-reader status announcements with semantic controls
+- Server-side file validation, rate limiting, and bot protection
+- Deterministic visual-contract tests and production build verification
 
-- Secure image uploads via multipart FormData
-- AI-generated visual descriptions optimized for accessibility
-- Real-time MP3 audio generation
-- Instant in-browser playback
-- One-click audio download
-- Full screen-reader and keyboard accessibility
-- Server-side validation and abuse protection
-- Production-grade rate limiting and bot protection
+## Architecture
 
----
+1. The browser submits an image with multipart `FormData`.
+2. The API validates the file type and size.
+3. OpenAI vision produces a concise description.
+4. Text-to-speech converts the description to MP3 audio.
+5. The API returns binary audio to the browser.
+6. The UI creates a local Blob URL for playback and download while announcing progress through accessible status regions.
 
-## Tech Stack
+## Technology
 
-Frontend:
-- Next.js (App Router)
-- TypeScript
+- Next.js 16 App Router
+- React 19 and TypeScript
 - Tailwind CSS
+- OpenAI vision and text-to-speech APIs
+- Arcjet rate limiting, shield, and bot protection
+- Vercel deployment
 
-Backend:
-- Next.js API Routes (Node.js runtime)
-- OpenAI Vision + Text-to-Speech
+## Accessibility contract
 
-Security & Performance:
-- Arcjet (rate limiting, bot protection, shield)
-- File validation (type + size)
-- Binary streaming via Buffer + Blob
+- Keyboard-only operation for the complete workflow
+- Programmatic labels and semantic heading structure
+- `aria-live` progress and error announcements
+- No visual-only status or interaction requirement
+- Accessible audio playback and download controls
 
-Accessibility:
-- aria-live status updates
-- Semantic labels and headings
-- Keyboard-only navigation support
+The automated contract test protects key accessibility and visual-system requirements. Manual assistive-technology testing is still part of release acceptance because automated checks cannot prove the complete screen-reader experience.
 
----
+## Run locally
 
-## System Flow
+Requirements:
 
-1. User uploads an image using FormData.
-2. Backend validates file type and size.
-3. Raw image bytes are converted to a base64 Data URL.
-4. Vision model generates a concise description.
-5. Description is converted into MP3 speech via Text-to-Speech.
-6. Raw audio binary is streamed back to the browser.
-7. Frontend creates a Blob URL for instant playback and download.
-8. Screen readers announce status updates in real time.
+- Node.js 20 or newer
+- npm
+- OpenAI API key
+- Arcjet key
 
----
+```bash
+git clone https://github.com/MarcoFernstaedt/image_accessibility_tool.git
+cd image_accessibility_tool
+npm ci
+cp .env.example .env.local
+npm run dev
+```
 
-## Accessibility Design
+Configure `.env.local` with your own credentials. Never commit that file.
 
-This project was built with blind and low-vision users as the primary audience:
+## Verification
 
-- Real-time announcements using aria-live
-- Fully labeled form controls
-- Keyboard-only navigation support
-- Descriptive audio player labeling
-- No reliance on visual-only feedback
+```bash
+npm test
+npm run lint
+npm run build
+```
 
----
+GitHub Actions runs the same test, lint, and production-build gates for every push and pull request.
 
-## Why This Matters
+## Security and privacy boundaries
 
-Most AI vision demos stop at text output. This platform closes the loop by delivering immediate spoken audio, creating a direct sensory translation from vision to sound.
+- Uploaded content is processed server-side and is not intentionally persisted by this application.
+- File type and size are validated before model invocation.
+- Rate limiting and bot protection reduce abuse but do not replace platform-level monitoring.
+- Images and generated descriptions are sent to the configured AI provider; do not upload sensitive material without reviewing that provider's data-handling terms.
+- Secrets remain server-side and must be supplied through environment variables.
 
-It demonstrates real-world skills in:
+## Repository map
 
-- Binary data transport
-- Media streaming over HTTP
-- AI inference pipelines
-- Accessibility engineering
-- Full-stack systems design
-
----
-
-## Future Improvements
-
-- Live camera capture
-- Multiple voice options
-- Language auto-detection
-- Batch uploads
-- Mobile PWA support
-
----
+```text
+app/
+  api/describe-image/route.ts   image validation and AI/audio pipeline
+  page.tsx                      accessible upload and playback interface
+tests/visual-contract.mjs       deterministic interface contract
+.env.example                    required configuration names only
+```
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
